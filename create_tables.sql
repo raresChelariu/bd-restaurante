@@ -1,163 +1,261 @@
 -- ============================================================
--- Script de creare a tabelelor pentru baza de date "Restaurante"
--- ============================================================
---
--- Termeni noi introduși în acest fișier sunt definiți în dictionar.md.
---
--- Cum se rulează:
---   psql -U postgres -d numele_bazei_de_date -f create_tables.sql
+-- RESTAURANTE3 - Script de creare tabele PostgreSQL
+-- Generat pe baza diagramei ER din documentul Restaurante3.pdf
 -- ============================================================
 
+-- Ordinea de creare respectă dependențele între tabele
+-- (tabelele referite sunt create înaintea celor care le referă)
 
--- Tabelul RESTAURANTE
--- Stochează informații de bază despre fiecare restaurant.
-CREATE TABLE restaurante (
-    id_restaurant INT      PRIMARY KEY,
-    nume          VARCHAR(100) NOT NULL,
-    oras          VARCHAR(100) NOT NULL,
-    adresa        VARCHAR(200),
-    telefon       VARCHAR(20)
+-- ============================================================
+-- 1. TABELE INDEPENDENTE (fără FK)
+-- ============================================================
+
+CREATE TABLE localitati (
+    id_localitate   NUMERIC(6)    PRIMARY KEY,
+    nume_localitate VARCHAR(70),
+    judet           VARCHAR(30)
 );
 
-
--- Tabelul MESE
--- Fiecare masă fizică dintr-un restaurant.
--- O masă nu poate exista fără restaurant → FOREIGN KEY pe id_restaurant.
-CREATE TABLE mese (
-    id_masa       INT PRIMARY KEY,
-    id_restaurant INT    NOT NULL,
-    numar_masa    INT    NOT NULL,  -- numărul mesei în cadrul restaurantului
-    capacitate    INT    NOT NULL,  -- câte persoane pot sta la masă
-    FOREIGN KEY (id_restaurant) REFERENCES restaurante(id_restaurant)
-);
-
-
--- Tabelul ANGAJATI
--- Angajații unui restaurant.
--- Câmpul id_manager este o cheie străină care indică tot spre acest tabel
--- (un angajat poate fi managerul altui angajat → relație ierarhică / recursivă).
-CREATE TABLE angajati (
-    id_angajat    INT       PRIMARY KEY,
-    nume          VARCHAR(100) NOT NULL,
-    prenume       VARCHAR(100) NOT NULL,
-    data_angajare DATE         NOT NULL,
-    functie       VARCHAR(100),
-    id_manager    INT,           -- NULL dacă angajatul nu are manager (ex: director general)
-    id_restaurant INT           NOT NULL,
-    FOREIGN KEY (id_manager)    REFERENCES angajati(id_angajat),
-    FOREIGN KEY (id_restaurant) REFERENCES restaurante(id_restaurant)
-);
-
-
--- Tabelul CLIENTI
--- Clienții care fac comenzi sau rezervări.
 CREATE TABLE clienti (
-    id_client INT       PRIMARY KEY,
-    nume      VARCHAR(100) NOT NULL,
-    prenume   VARCHAR(100) NOT NULL,
-    email     VARCHAR(150),
-    telefon   VARCHAR(20)
+    id_client   NUMERIC(7)      PRIMARY KEY,
+    nume        VARCHAR(40),
+    prenume     VARCHAR(40),
+    telefon     VARCHAR(20),
+    e_mail      VARCHAR(1000)
 );
 
-
--- Tabelul PRODUSE
--- Mâncărurile și băuturile oferite de restaurante.
--- Câmpul "tip" acceptă DOAR valorile 'mancare' sau 'bautura' (constrângere CHECK).
 CREATE TABLE produse (
-    id_produs     INT        PRIMARY KEY,
-    nume          VARCHAR(100)  NOT NULL,
-    tip           VARCHAR(10)   NOT NULL CHECK (tip IN ('mancare', 'bautura')),
-    pret          NUMERIC(10,2) NOT NULL,
-    id_restaurant INT           NOT NULL,
-    FOREIGN KEY (id_restaurant) REFERENCES restaurante(id_restaurant)
+    id_produs        NUMERIC(5)   PRIMARY KEY,
+    den_produs       VARCHAR(70),
+    categorie_produs VARCHAR(90)
 );
 
+-- ============================================================
+-- 2. TABELE CU FK SPRE TABELE INDEPENDENTE
+-- ============================================================
 
--- Tabelul COMENZI
--- O comandă este plasată de un client, preluată de un angajat,
--- la un anumit restaurant, la o dată și oră anume.
-CREATE TABLE comenzi (
-    id_comanda    INT    PRIMARY KEY,
-    id_client     INT       NOT NULL,
-    id_angajat    INT       NOT NULL,
-    id_restaurant INT       NOT NULL,
-    data_comanda  TIMESTAMP NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (id_client)     REFERENCES clienti(id_client),
-    FOREIGN KEY (id_angajat)    REFERENCES angajati(id_angajat),
-    FOREIGN KEY (id_restaurant) REFERENCES restaurante(id_restaurant)
+CREATE TABLE restaurante (
+    id_restaurant       NUMERIC(5)   PRIMARY KEY,
+    den_rest            VARCHAR(90),
+    adresa_rest         VARCHAR,
+    id_localitate       NUMERIC(5),
+    locuri_restaurant   INT,
+    CONSTRAINT fk_restaurante_localitati
+        FOREIGN KEY (id_localitate) REFERENCES localitati (id_localitate)
 );
 
-
--- Tabelul DETALII_COMENZI
--- Produsele incluse în fiecare comandă (ce s-a comandat și la ce preț).
--- Cheia primară este COMPUSĂ din id_comanda + id_produs:
---   același produs poate apărea o singură dată per comandă.
-CREATE TABLE detalii_comenzi (
-    id_comanda  INT           NOT NULL,
-    id_produs   INT           NOT NULL,
-    cantitate   INT           NOT NULL DEFAULT 1,
-    pret_unitar NUMERIC(10,2) NOT NULL,  -- prețul la momentul comenzii (poate diferi de prețul curent)
-    PRIMARY KEY (id_comanda, id_produs),
-    FOREIGN KEY (id_comanda) REFERENCES comenzi(id_comanda),
-    FOREIGN KEY (id_produs)  REFERENCES produse(id_produs)
-);
-
-
--- Tabelul REZERVARI
--- O rezervare este făcută de un client și poate acoperi
--- restaurante întregi, mese individuale, sau ambele (rezervare mixtă).
-CREATE TABLE rezervari (
-    id_rezervare   INT    PRIMARY KEY,
-    id_client      INT       NOT NULL,
-    data_rezervare TIMESTAMP NOT NULL,
-    numar_persoane INT       NOT NULL,
-    FOREIGN KEY (id_client) REFERENCES clienti(id_client)
-);
-
-
--- Tabelul REZERVARI_RESTAURANTE
--- Leagă o rezervare de un restaurant întreg
--- (clientul a rezervat întregul spațiu al restaurantului).
-CREATE TABLE rezervari_restaurante (
-    id_rezervare  INT NOT NULL,
-    id_restaurant INT NOT NULL,
-    PRIMARY KEY (id_rezervare, id_restaurant),
-    FOREIGN KEY (id_rezervare)  REFERENCES rezervari(id_rezervare),
-    FOREIGN KEY (id_restaurant) REFERENCES restaurante(id_restaurant)
-);
-
-
--- Tabelul REZERVARI_MESE
--- Leagă o rezervare de una sau mai multe mese individuale.
-CREATE TABLE rezervari_mese (
-    id_rezervare INT NOT NULL,
-    id_masa      INT NOT NULL,
-    PRIMARY KEY (id_rezervare, id_masa),
-    FOREIGN KEY (id_rezervare) REFERENCES rezervari(id_rezervare),
-    FOREIGN KEY (id_masa)      REFERENCES mese(id_masa)
-);
-
-
--- Tabelul FURNIZORI
--- Companiile care aprovizionează restaurantele cu produse.
 CREATE TABLE furnizori (
-    id_furnizor INT       PRIMARY KEY,
-    nume        VARCHAR(150) NOT NULL,
-    contact     VARCHAR(150),
-    oras        VARCHAR(100)
+    id_furnizor     NUMERIC(5)   PRIMARY KEY,
+    den_furn        VARCHAR(70),
+    tip_furn        VARCHAR(90),
+    adresa_furn     VARCHAR,
+    id_localitate   NUMERIC(5),
+    CONSTRAINT fk_furnizori_localitati
+        FOREIGN KEY (id_localitate) REFERENCES localitati (id_localitate)
 );
 
+CREATE TABLE bauturi (
+    id_bautura              NUMERIC(6)    PRIMARY KEY,
+    denumire_in_meniu       VARCHAR(44),
+    data_adaugarii_in_meniu DATE,
+    tip_bautura             VARCHAR(35),
+    alcoolica               FLOAT,
+    id_produs               NUMERIC(6),
+    cantitate_portie        NUMERIC,
+    pret_unitar             NUMERIC(10, 2),
+    CONSTRAINT fk_bauturi_produse
+        FOREIGN KEY (id_produs) REFERENCES produse (id_produs)
+);
 
--- Tabelul APROVIZIONARI
--- Înregistrează fiecare achiziție de produse de la un furnizor:
--- ce produs, de la cine, când, câtă cantitate și la ce preț.
-CREATE TABLE aprovizionari (
-    id_aprovizionare   INT        PRIMARY KEY,
-    id_furnizor        INT           NOT NULL,
-    id_produs          INT           NOT NULL,
-    data_aprovizionare DATE          NOT NULL,
-    cantitate          INT           NOT NULL,
-    pret_unitar        NUMERIC(10,2) NOT NULL,
-    FOREIGN KEY (id_furnizor) REFERENCES furnizori(id_furnizor),
-    FOREIGN KEY (id_produs)   REFERENCES produse(id_produs)
+CREATE TABLE meniuri_mancare (
+    id_sortiment_mancare    NUMERIC(6)    PRIMARY KEY,
+    denumire_in_meniu       VARCHAR(45),
+    data_adaugarii_in_meniu DATE,
+    tip_mancare             VARCHAR(50),
+    id_produs               NUMERIC(6),
+    gramaj_portie           NUMERIC,
+    pret_unitar             NUMERIC,
+    CONSTRAINT fk_meniuri_mancare_produse
+        FOREIGN KEY (id_produs) REFERENCES produse (id_produs)
+);
+
+-- ============================================================
+-- 3. MESE (FK spre restaurante)
+-- ============================================================
+
+CREATE TABLE mese (
+    id_masa         NUMERIC(5)   PRIMARY KEY,
+    id_restaurant   NUMERIC(5),
+    masa_nr         INT2,
+    observatii      VARCHAR(100),
+    CONSTRAINT fk_mese_restaurante
+        FOREIGN KEY (id_restaurant) REFERENCES restaurante (id_restaurant)
+);
+
+-- ============================================================
+-- 4. ANGAJAȚI ȘI SUBTIPURI
+-- ============================================================
+
+CREATE TABLE angajati (
+    id_angajat       NUMERIC(15)   PRIMARY KEY,
+    nume_angajat     VARCHAR(50),
+    prenume_angajat  VARCHAR(50),
+    cnp_angajat      CHAR(13),
+    data_nasterii    DATE,
+    data_angajarii   DATE,
+    id_restaurant    NUMERIC(15),
+    salariu          NUMERIC(15),
+    CONSTRAINT fk_angajati_restaurante
+        FOREIGN KEY (id_restaurant) REFERENCES restaurante (id_restaurant)
+);
+
+CREATE TABLE manageri (
+    id_manager      NUMERIC(5)   PRIMARY KEY,
+    id_restaurant   NUMERIC(5),
+    data_numirii    DATE,
+    CONSTRAINT fk_manageri_angajati
+        FOREIGN KEY (id_manager) REFERENCES angajati (id_angajat),
+    CONSTRAINT fk_manageri_restaurante
+        FOREIGN KEY (id_restaurant) REFERENCES restaurante (id_restaurant)
+);
+
+CREATE TABLE chelneri (
+    id_chelner               NUMERIC(5)    PRIMARY KEY,
+    punctaj_ultima_evaluare  NUMERIC(3, 2),
+    data_ultimei_evaluari    DATE,
+    CONSTRAINT fk_chelneri_angajati
+        FOREIGN KEY (id_chelner) REFERENCES angajati (id_angajat)
+);
+
+CREATE TABLE bucatari (
+    id_bucatar                  NUMERIC(5)      PRIMARY KEY,
+    specializari                VARCHAR(1000),
+    data_ultimei_specializari   DATE,
+    CONSTRAINT fk_bucatari_angajati
+        FOREIGN KEY (id_bucatar) REFERENCES angajati (id_angajat)
+);
+
+CREATE TABLE ture (
+    id_angajat              NUMERIC(5),
+    data_ora_inceput_tura   TIMESTAMP,
+    ora_ora_sfarsit_tura    TIMESTAMP,
+    observatii              VARCHAR(500),
+    CONSTRAINT pk_ture
+        PRIMARY KEY (id_angajat, data_ora_inceput_tura),
+    CONSTRAINT fk_ture_angajati
+        FOREIGN KEY (id_angajat) REFERENCES angajati (id_angajat)
+);
+
+-- ============================================================
+-- 5. COMENZI ȘI DETALII COMENZI
+-- ============================================================
+
+CREATE TABLE comenzi (
+    id_comanda          NUMERIC(12)   PRIMARY KEY,
+    data_ora_comanda    TIMESTAMP,
+    id_client           NUMERIC(5),
+    id_masa             NUMERIC(5),
+    observatii          VARCHAR(100),
+    CONSTRAINT fk_comenzi_clienti
+        FOREIGN KEY (id_client) REFERENCES clienti (id_client),
+    CONSTRAINT fk_comenzi_mese
+        FOREIGN KEY (id_masa) REFERENCES mese (id_masa)
+);
+
+CREATE TABLE com_bauturi (
+    id_comanda              NUMERIC(12),
+    id_bautura              NUMERIC(6),
+    cantitate_comandata     NUMERIC(5),
+    pret_unitar             NUMERIC(10, 2),
+    CONSTRAINT pk_com_bauturi
+        PRIMARY KEY (id_comanda, id_bautura),
+    CONSTRAINT fk_com_bauturi_comenzi
+        FOREIGN KEY (id_comanda) REFERENCES comenzi (id_comanda),
+    CONSTRAINT fk_com_bauturi_bauturi
+        FOREIGN KEY (id_bautura) REFERENCES bauturi (id_bautura)
+);
+
+CREATE TABLE com_mancare (
+    id_comanda              NUMERIC(12),
+    id_sortiment_mancare    NUMERIC(5),
+    id_portie_comandata     NUMERIC(5),
+    pret_unitar             NUMERIC(10, 2),
+    CONSTRAINT pk_com_mancare
+        PRIMARY KEY (id_comanda, id_sortiment_mancare),
+    CONSTRAINT fk_com_mancare_comenzi
+        FOREIGN KEY (id_comanda) REFERENCES comenzi (id_comanda),
+    CONSTRAINT fk_com_mancare_meniuri
+        FOREIGN KEY (id_sortiment_mancare) REFERENCES meniuri_mancare (id_sortiment_mancare)
+);
+
+CREATE TABLE bonuri_fiscale (
+    id_bon_f        NUMERIC(10)   PRIMARY KEY,
+    nr_bon_f        VARCHAR(20),
+    data_ora_bon_f  TIMESTAMP,
+    id_comanda      NUMERIC(10),
+    suma_bon_f      NUMERIC(10, 2),
+    cod_locatie     VARCHAR(20),
+    id_client       NUMERIC(7),
+    CONSTRAINT fk_bonuri_comenzi
+        FOREIGN KEY (id_comanda) REFERENCES comenzi (id_comanda),
+    CONSTRAINT fk_bonuri_clienti
+        FOREIGN KEY (id_client) REFERENCES clienti (id_client)
+);
+
+-- ============================================================
+-- 6. REZERVĂRI
+-- ============================================================
+
+CREATE TABLE rezervari (
+    id_rezervare        NUMERIC(10)   PRIMARY KEY,
+    data_ora_rezervare  TIMESTAMP,
+    id_client           NUMERIC(5),
+    data_ora_sosire     TIMESTAMP,
+    data_ora_plecare    TIMESTAMP,
+    CONSTRAINT fk_rezervari_clienti
+        FOREIGN KEY (id_client) REFERENCES clienti (id_client)
+);
+
+CREATE TABLE rezervari_mese (
+    id_rezervare    NUMERIC(10),
+    id_masa         NUMERIC(5),
+    observatii      VARCHAR(100),
+    CONSTRAINT pk_rezervari_mese
+        PRIMARY KEY (id_rezervare, id_masa),
+    CONSTRAINT fk_rezervari_mese_rezervari
+        FOREIGN KEY (id_rezervare) REFERENCES rezervari (id_rezervare),
+    CONSTRAINT fk_rezervari_mese_mese
+        FOREIGN KEY (id_masa) REFERENCES mese (id_masa)
+);
+
+CREATE TABLE rezervari_restaurante (
+    id_rezervare    NUMERIC(10),
+    id_restaurant   NUMERIC(5),
+    observatii      VARCHAR(1000),
+    CONSTRAINT pk_rezervari_restaurante
+        PRIMARY KEY (id_rezervare, id_restaurant),
+    CONSTRAINT fk_rez_rest_rezervari
+        FOREIGN KEY (id_rezervare) REFERENCES rezervari (id_rezervare),
+    CONSTRAINT fk_rez_rest_restaurante
+        FOREIGN KEY (id_restaurant) REFERENCES restaurante (id_restaurant)
+);
+
+-- ============================================================
+-- 7. APROVIZIONĂRI DE LA FURNIZORI
+-- ============================================================
+
+CREATE TABLE comenzi_produse_furnizori (
+    id_comanda_furnizor NUMERIC(10)   PRIMARY KEY,
+    data_ora_comanda    TIMESTAMP,
+    id_restaurant       NUMERIC(5),
+    id_furnizor         NUMERIC(5),
+    id_produs           NUMERIC(6),
+    cantitate           NUMERIC,
+    pret_total          NUMERIC,
+    CONSTRAINT fk_cpf_restaurante
+        FOREIGN KEY (id_restaurant) REFERENCES restaurante (id_restaurant),
+    CONSTRAINT fk_cpf_furnizori
+        FOREIGN KEY (id_furnizor) REFERENCES furnizori (id_furnizor),
+    CONSTRAINT fk_cpf_produse
+        FOREIGN KEY (id_produs) REFERENCES produse (id_produs)
 );
