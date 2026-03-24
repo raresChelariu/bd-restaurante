@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"import PyPDF2; pdf = PyPDF2.PdfReader\\(open\\(''c:/Users/CUG/Desktop/feea/bd restaurante/Restaurante3.pdf'', ''rb''\\)\\); [print\\(f''=== Page {i+1} ===\\\\n{page.extract_text\\(\\)}''\\) for i, page in enumerate\\(pdf.pages\\)]\")",
+      "Bash(python -c \"import pdfplumber; pdf = pdfplumber.open\\(''c:/Users/CUG/Desktop/feea/bd restaurante/Restaurante3.pdf''\\); [print\\(f''=== Page {i+1} ===\\\\n{page.extract_text\\(\\)}''\\) for i, page in enumerate\\(pdf.pages\\)]\")",
+      "Bash(python -c \":*)"
+    ]
+  }
+}
