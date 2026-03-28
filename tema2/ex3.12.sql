@@ -1,6 +1,6 @@
--- Restaurante3.12: Care sunt comenzile care conțin mai multe băuturi decât comanda X?
--- Înlocuiți X cu id-ul real al comenzii de referință.
--- "Mai multe băuturi" = cantitate totală de băuturi comandate mai mare.
+-- Restaurante3.12: Care sunt comenzile care contin mai multe bauturi decat comanda X?
+-- Inlocuiti X cu id-ul real al comenzii de referinta.
+-- "Mai multe bauturi" = cantitate totala de bauturi comandate mai mare.
 
 SELECT
     id_comanda,

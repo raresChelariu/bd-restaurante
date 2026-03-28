@@ -3,11 +3,11 @@
 -- Generat pe baza diagramei ER din documentul Restaurante3.pdf
 -- ============================================================
 
--- Ordinea de creare respectă dependențele între tabele
--- (tabelele referite sunt create înaintea celor care le referă)
+-- Ordinea de creare respecta dependentele intre tabele
+-- (tabelele referite sunt create inaintea celor care le refera)
 
 -- ============================================================
--- 1. TABELE INDEPENDENTE (fără FK)
+-- 1. TABELE INDEPENDENTE (fara FK)
 -- ============================================================
 
 CREATE TABLE localitati (
@@ -93,7 +93,7 @@ CREATE TABLE mese (
 );
 
 -- ============================================================
--- 4. ANGAJAȚI ȘI SUBTIPURI
+-- 4. ANGAJATI SI SUBTIPURI
 -- ============================================================
 
 CREATE TABLE angajati (
@@ -147,7 +147,7 @@ CREATE TABLE ture (
 );
 
 -- ============================================================
--- 5. COMENZI ȘI DETALII COMENZI
+-- 5. COMENZI SI DETALII COMENZI
 -- ============================================================
 
 CREATE TABLE comenzi (
@@ -203,7 +203,7 @@ CREATE TABLE bonuri_fiscale (
 );
 
 -- ============================================================
--- 6. REZERVĂRI
+-- 6. REZERVARI
 -- ============================================================
 
 CREATE TABLE rezervari (
@@ -241,7 +241,7 @@ CREATE TABLE rezervari_restaurante (
 );
 
 -- ============================================================
--- 7. APROVIZIONĂRI DE LA FURNIZORI
+-- 7. APROVIZIONARI DE LA FURNIZORI
 -- ============================================================
 
 CREATE TABLE comenzi_produse_furnizori (

@@ -1,8 +1,8 @@
--- Restaurante3.7: Pentru fiecare produs, afișați pe coloane separate valoarea
---                 comenzilor pentru anii 2021, 2022 și 2023.
+-- Restaurante3.7: Pentru fiecare produs, afisati pe coloane separate valoarea
+--                 comenzilor pentru anii 2021, 2022 si 2023.
 
 WITH valori AS (
-    -- valoare din băuturi comandate
+    -- valoare din bauturi comandate
     SELECT
         b.id_produs,
         EXTRACT(YEAR FROM c.data_ora_comanda)::INT         AS an,
@@ -14,7 +14,7 @@ WITH valori AS (
 
     UNION ALL
 
-    -- valoare din mâncare comandată
+    -- valoare din mancare comandata
     SELECT
         mm.id_produs,
         EXTRACT(YEAR FROM c.data_ora_comanda)::INT         AS an,

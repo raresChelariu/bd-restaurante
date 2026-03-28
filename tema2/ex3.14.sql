@@ -1,4 +1,4 @@
--- Restaurante3.14: Calculați ponderea fiecărui furnizor în totalul aprovizionărilor din 2023.
+-- Restaurante3.14: Calculati ponderea fiecarui furnizor in totalul aprovizionarilor din 2023.
 
 SELECT
     f.id_furnizor,

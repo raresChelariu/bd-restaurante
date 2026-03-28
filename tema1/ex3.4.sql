@@ -1,5 +1,5 @@
--- Restaurante3.4: Afișați, în dreptul fiecărei rezervări din 2024, dacă este o rezervare
---                 pentru întreg restaurantul, pentru (cel puțin) o masă, sau mixtă.
+-- Restaurante3.4: Afisati, in dreptul fiecarei rezervari din 2024, daca este o rezervare
+--                 pentru intreg restaurantul, pentru (cel putin) o masa, sau mixta.
 
 SELECT
     r.id_rezervare,
@@ -7,11 +7,11 @@ SELECT
     CASE
         WHEN EXISTS (SELECT 1 FROM rezervari_restaurante rr WHERE rr.id_rezervare = r.id_rezervare)
          AND EXISTS (SELECT 1 FROM rezervari_mese       rm WHERE rm.id_rezervare = r.id_rezervare)
-            THEN 'mixtă'
+            THEN 'mixta'
         WHEN EXISTS (SELECT 1 FROM rezervari_restaurante rr WHERE rr.id_rezervare = r.id_rezervare)
-            THEN 'restaurant întreg'
+            THEN 'restaurant intreg'
         ELSE
-            'cel puțin o masă'
+            'cel putin o masa'
     END AS tip_rezervare
 FROM rezervari r
 WHERE EXTRACT(YEAR FROM r.data_ora_rezervare) = 2024

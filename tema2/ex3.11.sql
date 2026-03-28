@@ -1,6 +1,7 @@
--- Restaurante3.11: Afișați primele trei comenzi pentru fiecare restaurant din orașul X.
--- Înlocuiți 'X' cu numele real al localității.
--- "Primele trei" = primele 3 în ordine cronologică (data_ora_comanda).
+-- Restaurante3.11: Afisati primele trei comenzi pentru fiecare restaurant din orasul X.
+-- Inlocuiti 'X' cu numele real al localitatii.
+-- "Primele trei" = primele 3 in ordine cronologica (data_ora_comanda).
+-- select * from localitati;
 
 SELECT
     restaurant,
@@ -20,7 +21,7 @@ FROM (
     JOIN mese m        ON m.id_masa       = c.id_masa
     JOIN restaurante r ON r.id_restaurant = m.id_restaurant
     JOIN localitati l  ON l.id_localitate = r.id_localitate
-    WHERE l.nume_localitate = 'X'
+    WHERE l.nume_localitate = 'Bucuresti'
 ) sub
 WHERE rang <= 3
 ORDER BY restaurant, rang;

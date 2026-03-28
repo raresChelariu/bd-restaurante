@@ -1,4 +1,4 @@
--- Restaurante3.8: Care este cel mai mare număr de rezervări pentru o lună calendaristică?
+-- Restaurante3.8: Care este cel mai mare numar de rezervari pentru o luna calendaristica?
 
 SELECT MAX(nr_rezervari) AS max_rezervari_pe_luna
 FROM (

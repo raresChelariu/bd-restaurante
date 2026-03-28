@@ -1,10 +1,10 @@
--- Restaurante3.13: Care sunt produsele comandate de măcar toți clienții care au comandat produsul X?
--- Înlocuiți X cu id-ul real al produsului de referință.
--- Tehnică: dublu NOT EXISTS (împărțire relațională).
--- "Produsul P este în rezultat dacă nu există niciun client care a comandat X dar NU a comandat P."
+-- Restaurante3.13: Care sunt produsele comandate de macar toti clientii care au comandat produsul X?
+-- Inlocuiti X cu id-ul real al produsului de referinta.
+-- Tehnica: dublu NOT EXISTS (impartire relationala).
+-- "Produsul P este in rezultat daca nu exista niciun client care a comandat X dar NU a comandat P."
 
 WITH comenzi_produs AS (
-    -- produse comandate prin băuturi
+    -- produse comandate prin bauturi
     SELECT c.id_client, b.id_produs
     FROM com_bauturi cb
     JOIN comenzi c ON c.id_comanda  = cb.id_comanda
@@ -12,7 +12,7 @@ WITH comenzi_produs AS (
 
     UNION
 
-    -- produse comandate prin mâncare
+    -- produse comandate prin mancare
     SELECT c.id_client, mm.id_produs
     FROM com_mancare cm
     JOIN comenzi c          ON c.id_comanda             = cm.id_comanda
@@ -20,9 +20,9 @@ WITH comenzi_produs AS (
 )
 SELECT DISTINCT p.id_produs, p.den_produs
 FROM produse p
-WHERE p.id_produs <> X   -- opțional: excludem produsul X din rezultat
+WHERE p.id_produs <> X   -- optional: excludem produsul X din rezultat
   AND NOT EXISTS (
-      -- există vreun client care a comandat X dar NU a comandat acest produs?
+      -- exista vreun client care a comandat X dar NU a comandat acest produs?
       SELECT 1
       FROM comenzi_produs cx
       WHERE cx.id_produs = X

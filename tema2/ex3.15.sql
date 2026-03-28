@@ -1,5 +1,5 @@
--- Restaurante3.15: Pentru fiecare restaurant, aflați pozițiile în topul vânzărilor
---                  pe: luna ianuarie 2023, semestrul 1 din 2023, și întreg anul 2023.
+-- Restaurante3.15: Pentru fiecare restaurant, aflati pozitiile in topul vanzarilor
+--                  pe: luna ianuarie 2023, semestrul 1 din 2023, si intreg anul 2023.
 
 WITH vanzari_bauturi AS (
     SELECT

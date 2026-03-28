@@ -1,4 +1,4 @@
--- Restaurante3.3: Care sunt comenzile care conțin și mâncare, și băutură?
+-- Restaurante3.3: Care sunt comenzile care contin si mancare, si bautura?
 
 SELECT id_comanda FROM com_mancare
 INTERSECT

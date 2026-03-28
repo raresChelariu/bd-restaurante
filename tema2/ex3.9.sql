@@ -1,5 +1,5 @@
--- Restaurante3.9: Pentru fiecare client și lună calendaristică, afișați numărul
---                 rezervărilor, cu un subtotal la nivel de an calendaristic și un total general.
+-- Restaurante3.9: Pentru fiecare client si luna calendaristica, afisati numarul
+--                 rezervarilor, cu un subtotal la nivel de an calendaristic si un total general.
 
 WITH baza AS (
     SELECT
@@ -20,7 +20,7 @@ SELECT
     COUNT(*) AS nr_rezervari
 FROM baza
 GROUP BY GROUPING SETS (
-    (id_client, nume, prenume, an, luna),   -- detaliu: client + an + lună
+    (id_client, nume, prenume, an, luna),   -- detaliu: client + an + luna
     (id_client, nume, prenume, an),          -- subtotal: client + an
     ()                                       -- total general
 )

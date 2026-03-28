@@ -1,6 +1,6 @@
--- Restaurante3.6: Pentru fiecare manager afișați numărul de subordonați.
--- Un subordonat = angajat care lucrează la același restaurant condus de manager,
--- exclusiv managerul însuși.
+-- Restaurante3.6: Pentru fiecare manager afisati numarul de subordonati.
+-- Un subordonat = angajat care lucreaza la acelasi restaurant condus de manager,
+-- exclusiv managerul insusi.
 
 SELECT
     m.id_manager,

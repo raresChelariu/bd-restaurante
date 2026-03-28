@@ -1,19 +1,44 @@
 -- ============================================================
--- Script de populare cu date realiste (România)
+-- Script de populare cu date realiste (Romania)
 -- ============================================================
--- Rulează DUPĂ create_tables.sql.
--- Ordinea INSERT-urilor respectă dependențele dintre tabele:
--- tabelele referite (cu FK) sunt populate înaintea celor care le referă.
+-- Ruleaza DUPA create_tables.sql.
+-- Ordinea INSERT-urilor respecta dependentele dintre tabele:
+-- tabelele referite (cu FK) sunt populate inaintea celor care le refera.
 -- ============================================================
+
+-- ============================================================
+-- 0. STERGERE DATE EXISTENTE (ordine inversa FK)
+-- ============================================================
+DELETE FROM comenzi_produse_furnizori;
+DELETE FROM rezervari_mese;
+DELETE FROM rezervari_restaurante;
+DELETE FROM rezervari;
+DELETE FROM bonuri_fiscale;
+DELETE FROM com_mancare;
+DELETE FROM com_bauturi;
+DELETE FROM comenzi;
+DELETE FROM ture;
+DELETE FROM bucatari;
+DELETE FROM chelneri;
+DELETE FROM manageri;
+DELETE FROM angajati;
+DELETE FROM mese;
+DELETE FROM meniuri_mancare;
+DELETE FROM bauturi;
+DELETE FROM furnizori;
+DELETE FROM restaurante;
+DELETE FROM produse;
+DELETE FROM clienti;
+DELETE FROM localitati;
 
 
 -- ============================================================
 -- 1. LOCALITATI
 -- ============================================================
 INSERT INTO localitati (id_localitate, nume_localitate, judet) VALUES
-    (1, 'București',   'Ilfov'),
+    (1, 'Bucuresti',   'Ilfov'),
     (2, 'Cluj-Napoca', 'Cluj'),
-    (3, 'Iași',        'Iași');
+    (3, 'Iasi',        'Iasi');
 
 
 -- ============================================================
@@ -121,8 +146,8 @@ INSERT INTO mese (id_masa, id_restaurant, masa_nr, observatii) VALUES
 -- ============================================================
 -- 9. ANGAJATI (FK → restaurante)
 -- ============================================================
--- Angajați din ani diferiți → necesari pentru exercițiul 3.1
--- CNP-urile sunt fictive, create doar în scop educațional.
+-- Angajati din ani diferiti → necesari pentru exercitiul 3.1
+-- CNP-urile sunt fictive, create doar in scop educational.
 INSERT INTO angajati (id_angajat, nume_angajat, prenume_angajat, cnp_angajat, data_nasterii, data_angajarii, id_restaurant, salariu) VALUES
     -- La Mama (id_restaurant=1)
     (1,  'Popescu',    'Ion',      '1800510400001', '1980-05-10', '2019-05-15', 1, 6500),
@@ -143,7 +168,7 @@ INSERT INTO angajati (id_angajat, nume_angajat, prenume_angajat, cnp_angajat, da
 -- ============================================================
 -- 10. MANAGERI (FK → angajati, restaurante)
 -- ============================================================
--- Un manager este și angajat: id_manager = id_angajat din tabelul angajati.
+-- Un manager este si angajat: id_manager = id_angajat din tabelul angajati.
 INSERT INTO manageri (id_manager, id_restaurant, data_numirii) VALUES
     (1, 1, '2019-05-15'),  -- Popescu Ion → manager La Mama
     (6, 2, '2020-04-01'),  -- Moldovan Cristina → manager Caru cu Bere
@@ -153,7 +178,7 @@ INSERT INTO manageri (id_manager, id_restaurant, data_numirii) VALUES
 -- ============================================================
 -- 11. CHELNERI (FK → angajati)
 -- ============================================================
--- Un chelner este și angajat: id_chelner = id_angajat.
+-- Un chelner este si angajat: id_chelner = id_angajat.
 INSERT INTO chelneri (id_chelner, punctaj_ultima_evaluare, data_ultimei_evaluari) VALUES
     (3,  9.50, '2024-01-15'),  -- Dumitrescu Andrei
     (4,  8.80, '2024-01-15'),  -- Constantin Elena
@@ -182,13 +207,13 @@ INSERT INTO ture (id_angajat, data_ora_inceput_tura, ora_ora_sfarsit_tura, obser
     (3, '2021-03-15 11:00:00', '2021-03-15 23:00:00', NULL),
     (3, '2021-06-20 18:00:00', '2021-06-20 23:00:00', NULL),
     (3, '2023-01-10 18:00:00', '2023-01-10 23:00:00', NULL),
-    (3, '2023-02-14 18:00:00', '2023-02-14 23:00:00', NULL),  -- acoperă comanda 5 (Mihai)
-    (3, '2023-08-22 18:00:00', '2023-08-22 23:00:00', NULL),  -- acoperă comanda 12 (Mihai)
+    (3, '2023-02-14 18:00:00', '2023-02-14 23:00:00', NULL),  -- acopera comanda 5 (Mihai)
+    (3, '2023-08-22 18:00:00', '2023-08-22 23:00:00', NULL),  -- acopera comanda 12 (Mihai)
     (3, '2024-03-08 19:00:00', '2024-03-08 23:00:00', NULL),
     -- Elena Constantin (chelner, La Mama)
     (4, '2022-04-10 10:00:00', '2022-04-10 18:00:00', NULL),
     (4, '2023-01-20 11:00:00', '2023-01-20 16:00:00', NULL),
-    (4, '2023-05-20 10:00:00', '2023-05-20 18:00:00', NULL),  -- acoperă comanda 6 (Mihai)
+    (4, '2023-05-20 10:00:00', '2023-05-20 18:00:00', NULL),  -- acopera comanda 6 (Mihai)
     -- Radu Stanescu (chelner, Caru cu Bere)
     (7, '2022-09-05 19:00:00', '2022-09-05 23:00:00', NULL),
     (7, '2023-01-25 19:00:00', '2023-01-25 23:00:00', NULL),
@@ -206,21 +231,21 @@ INSERT INTO ture (id_angajat, data_ora_inceput_tura, ora_ora_sfarsit_tura, obser
 -- ============================================================
 -- 14. COMENZI (FK → clienti, mese)
 -- ============================================================
--- Comanda se plasează la o masă; restaurantul se deduce prin masă.
+-- Comanda se plaseaza la o masa; restaurantul se deduce prin masa.
 -- Chelnerul care a servit se deduce prin ture (vezi ex. 3.2).
 INSERT INTO comenzi (id_comanda, data_ora_comanda, id_client, id_masa, observatii) VALUES
     (1,  '2021-03-15 12:30:00', 2, 1, NULL),  -- Ana Maria    @ La Mama (masa 1), 2021
     (2,  '2021-06-20 19:00:00', 3, 2, NULL),  -- Alexandru    @ La Mama (masa 2), 2021
     (3,  '2022-04-10 13:45:00', 4, 3, NULL),  -- Ioana        @ La Mama (masa 3), 2022
     (4,  '2022-09-05 20:00:00', 2, 4, NULL),  -- Ana Maria    @ Caru (masa 4),    2022
-    (5,  '2023-02-14 19:30:00', 1, 1, NULL),  -- MIHAI/XYZ    @ La Mama (masa 1), 2023
-    (6,  '2023-05-20 12:00:00', 1, 2, NULL),  -- MIHAI/XYZ    @ La Mama (masa 2), 2023
+    (5,  '2023-02-14 19:30:00', 1, 1, NULL),  -- MIHAI    @ La Mama (masa 1), 2023
+    (6,  '2023-05-20 12:00:00', 1, 2, NULL),  -- MIHAI    @ La Mama (masa 2), 2023
     (7,  '2023-07-08 21:00:00', 2, 4, NULL),  -- Ana Maria    @ Caru (masa 4),    2023
     (8,  '2023-11-15 18:30:00', 3, 5, NULL),  -- Alexandru    @ Caru (masa 5),    2023
     (9,  '2024-01-20 13:00:00', 5, 6, NULL),  -- Bogdan       @ Vatra (masa 6),   2024
     (10, '2024-03-08 20:00:00', 4, 1, NULL),  -- Ioana        @ La Mama (masa 1), 2024
     (11, '2024-04-12 19:00:00', 2, 4, NULL),  -- Ana Maria    @ Caru (masa 4),    2024
-    (12, '2023-08-22 20:30:00', 1, 3, NULL),  -- MIHAI/XYZ    @ La Mama (masa 3), 2023
+    (12, '2023-08-22 20:30:00', 1, 3, NULL),  -- MIHAI    @ La Mama (masa 3), 2023
     (13, '2023-01-10 19:00:00', 3, 1, NULL),  -- Alexandru    @ La Mama (masa 1), 2023
     (14, '2023-01-20 12:30:00', 4, 2, NULL),  -- Ioana        @ La Mama (masa 2), 2023
     (15, '2023-01-25 20:00:00', 2, 4, NULL),  -- Ana Maria    @ Caru (masa 4),    2023
