@@ -1,0 +1,14 @@
+-- Ex6: Care produse NU apar in nicio bautura din meniu?
+--      Afisati id_produs si den_produs.
+--
+-- Indicatii:
+-- Tabele implicate: produse, bauturi
+--   produse: id_produs, den_produs, categorie_produs
+--   bauturi: id_bautura, denumire_in_meniu, data_adaugarii_in_meniu,
+--            tip_bautura, alcoolica, id_produs, cantitate_portie, pret_unitar
+--
+-- Notiuni: EXCEPT  (sau alternativ: NOT IN / NOT EXISTS)
+-- Structura EXCEPT:
+--   SELECT id_produs FROM produse
+--   EXCEPT
+--   SELECT id_produs FROM bauturi;

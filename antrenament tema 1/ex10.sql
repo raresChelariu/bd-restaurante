@@ -1,0 +1,16 @@
+-- Ex10: Pentru fiecare restaurant, afisati numarul de rezervari din 2024
+--       de fiecare tip: 'restaurant intreg', 'cel putin o masa', 'mixta'.
+--       Afisati: numele restaurantului, nr_restaurant_intreg,
+--                nr_masa, nr_mixta.
+--
+-- Indicatii:
+-- Tabele implicate: restaurante, rezervari, rezervari_restaurante, rezervari_mese
+--   restaurante:           id_restaurant, den_rest, adresa_rest, id_localitate, locuri_restaurant
+--   rezervari:             id_rezervare, data_ora_rezervare, id_client,
+--                          data_ora_sosire, data_ora_plecare
+--   rezervari_restaurante: id_rezervare, id_restaurant, observatii
+--   rezervari_mese:        id_rezervare, id_masa, observatii
+--
+-- Notiuni: CASE WHEN EXISTS, SUM, GROUP BY, EXTRACT, JOIN
+-- Hint: Determinati tipul fiecarei rezervari (ca in ex3.4 din tema),
+--       apoi agregati cu SUM(CASE WHEN tip = '...' THEN 1 ELSE 0 END).

@@ -1,0 +1,10 @@
+-- Ex3: Care restaurante au mai mult de 3 angajati?
+--      Afisati numele restaurantului si numarul de angajati.
+--
+-- Indicatii:
+-- Tabele implicate: restaurante, angajati
+--   restaurante: id_restaurant, den_rest, adresa_rest, id_localitate, locuri_restaurant
+--   angajati:    id_angajat, nume_angajat, prenume_angajat, cnp_angajat,
+--                data_nasterii, data_angajarii, id_restaurant, salariu
+--
+-- Notiuni: COUNT, GROUP BY, HAVING, JOIN

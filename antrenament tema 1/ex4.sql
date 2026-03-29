@@ -1,0 +1,12 @@
+-- Ex4: Care clienti au facut comenzi la restaurantul din localitatea 'Bucuresti' in 2023?
+--      Afisati numele si prenumele clientului (fara duplicate), ordonat alfabetic.
+--
+-- Indicatii:
+-- Tabele implicate: clienti, comenzi, mese, restaurante, localitati
+--   clienti:    id_client, nume, prenume, telefon, e_mail
+--   comenzi:    id_comanda, data_ora_comanda, id_client, id_masa, observatii
+--   mese:       id_masa, id_restaurant, masa_nr, observatii
+--   restaurante: id_restaurant, den_rest, adresa_rest, id_localitate, locuri_restaurant
+--   localitati: id_localitate, nume_localitate, judet
+--
+-- Notiuni: DISTINCT, JOIN (5 tabele), EXTRACT(YEAR FROM ...), WHERE, ORDER BY

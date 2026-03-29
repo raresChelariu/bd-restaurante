@@ -1,0 +1,19 @@
+-- Ex7: Afisati fiecare angajat (nume, prenume) si categoria sa:
+--        'manager'       - daca apare in tabelul manageri
+--        'chelner'       - daca apare in tabelul chelneri
+--        'bucatar'       - daca apare in tabelul bucatari
+--        'alt angajat'   - altfel
+--      Ordonati dupa categorie, apoi dupa nume.
+--
+-- Indicatii:
+-- Tabele implicate: angajati, manageri, chelneri, bucatari
+--   angajati: id_angajat, nume_angajat, prenume_angajat, cnp_angajat,
+--             data_nasterii, data_angajarii, id_restaurant, salariu
+--   manageri: id_manager, id_restaurant, data_numirii
+--             (id_manager este FK catre angajati.id_angajat)
+--   chelneri: id_chelner, punctaj_ultima_evaluare, data_ultimei_evaluari
+--             (id_chelner este FK catre angajati.id_angajat)
+--   bucatari: id_bucatar, specializari, data_ultimei_specializari
+--             (id_bucatar este FK catre angajati.id_angajat)
+--
+-- Notiuni: CASE WHEN EXISTS (subinterogare corelata), ORDER BY

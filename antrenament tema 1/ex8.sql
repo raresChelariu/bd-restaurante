@@ -1,0 +1,14 @@
+-- Ex8: Care clienti NU au facut nicio comanda pana acum?
+--      Afisati numele si prenumele clientului, ordonat alfabetic.
+--
+-- Indicatii:
+-- Tabele implicate: clienti, comenzi
+--   clienti: id_client, nume, prenume, telefon, e_mail
+--   comenzi: id_comanda, data_ora_comanda, id_client, id_masa, observatii
+--
+-- Notiuni: NOT EXISTS (subinterogare corelata)
+-- Structura NOT EXISTS:
+--   SELECT ... FROM clienti cl
+--   WHERE NOT EXISTS (
+--       SELECT 1 FROM comenzi c WHERE c.id_client = cl.id_client
+--   );

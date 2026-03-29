@@ -1,0 +1,16 @@
+-- Ex9: Care este valoarea totala cheltuita de fiecare client
+--      (suma preturilor din com_bauturi + com_mancare, pe toate comenzile sale)?
+--      Afisati numele, prenumele si totalul, inclusiv clientii cu total 0.
+--      Ordonati descrescator dupa total.
+--
+-- Indicatii:
+-- Tabele implicate: clienti, comenzi, com_bauturi, com_mancare
+--   clienti:     id_client, nume, prenume, telefon, e_mail
+--   comenzi:     id_comanda, data_ora_comanda, id_client, id_masa, observatii
+--   com_bauturi: id_comanda, id_bautura, cantitate_comandata, pret_unitar
+--   com_mancare: id_comanda, id_sortiment_mancare, id_portie_comandata, pret_unitar
+--
+-- Notiuni: LEFT JOIN, SUM, COALESCE, GROUP BY, ORDER BY
+-- Hint: Folositi LEFT JOIN pentru a include clientii fara comenzi.
+--       COALESCE(valoare, 0) transforma NULL in 0.
+--       Valoarea unui rand in com_bauturi = cantitate_comandata * pret_unitar.

@@ -1,0 +1,11 @@
+-- Ex2: Cati angajati are fiecare restaurant?
+--      Afisati numele restaurantului si numarul de angajati,
+--      ordonat descrescator dupa numarul de angajati.
+--
+-- Indicatii:
+-- Tabele implicate: restaurante, angajati
+--   restaurante: id_restaurant, den_rest, adresa_rest, id_localitate, locuri_restaurant
+--   angajati:    id_angajat, nume_angajat, prenume_angajat, cnp_angajat,
+--                data_nasterii, data_angajarii, id_restaurant, salariu
+--
+-- Notiuni: COUNT, GROUP BY, JOIN, ORDER BY

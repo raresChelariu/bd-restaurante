@@ -1,0 +1,13 @@
+-- Ex5: Afisati id-urile tuturor produselor care apar fie in meniuri_mancare,
+--      fie in bauturi (sau in ambele).
+--      Ordonati crescator dupa id_produs.
+--
+-- Indicatii:
+-- Tabele implicate: meniuri_mancare, bauturi
+--   meniuri_mancare: id_sortiment_mancare, denumire_in_meniu, data_adaugarii_in_meniu,
+--                    tip_mancare, id_produs, gramaj_portie, pret_unitar
+--   bauturi:         id_bautura, denumire_in_meniu, data_adaugarii_in_meniu,
+--                    tip_bautura, alcoolica, id_produs, cantitate_portie, pret_unitar
+--
+-- Notiuni: UNION, ORDER BY
+-- Atentie: UNION elimina duplicatele; UNION ALL le pastreaza.

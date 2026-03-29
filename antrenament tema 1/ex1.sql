@@ -1,0 +1,8 @@
+-- Ex1: In ce luni ale anului s-au plasat comenzi in 2023?
+--      Afisati numarul lunii si ordonati crescator.
+--
+-- Indicatii:
+-- Tabele implicate: comenzi
+--   comenzi: id_comanda, data_ora_comanda, id_client, id_masa, observatii
+--
+-- Notiuni: DISTINCT, EXTRACT(MONTH FROM ...), WHERE, ORDER BY
