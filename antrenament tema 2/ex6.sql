@@ -1,0 +1,17 @@
+-- Ex6: Afisati primele 2 comenzi (cronologic) pentru fiecare client.
+--      Afisati: numele clientului, prenumele, id_comanda,
+--               data_ora_comanda si rangul comenzii.
+--
+-- Indicatii:
+-- Tabele implicate: clienti, comenzi
+--   clienti: id_client, nume, prenume, telefon, e_mail
+--   comenzi: id_comanda, data_ora_comanda, id_client, id_masa, observatii
+--
+-- Notiuni: ROW_NUMBER() OVER (PARTITION BY ... ORDER BY ...), subquery, WHERE
+-- Structura generala:
+--   SELECT ... FROM (
+--       SELECT ..., ROW_NUMBER() OVER (PARTITION BY id_client ORDER BY data_ora_comanda) AS rang
+--       FROM ...
+--   ) sub
+--   WHERE rang <= 2;
+-- Hint: ROW_NUMBER() numeroteaza randurile in cadrul fiecarei partitii (client).

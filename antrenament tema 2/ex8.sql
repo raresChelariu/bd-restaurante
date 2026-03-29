@@ -1,0 +1,17 @@
+-- Ex8: Calculati ponderea fiecarui restaurant in totalul comenzilor
+--      (ca numar de comenzi) din 2023.
+--      Afisati: numele restaurantului, nr_comenzi, total_general si pondere_procent (2 zecimale).
+--
+-- Indicatii:
+-- Tabele implicate: restaurante, mese, comenzi
+--   restaurante: id_restaurant, den_rest, adresa_rest, id_localitate, locuri_restaurant
+--   mese:        id_masa, id_restaurant, masa_nr, observatii
+--   comenzi:     id_comanda, data_ora_comanda, id_client, id_masa, observatii
+--
+-- Notiuni: SUM() OVER (), COUNT, GROUP BY, ROUND, EXTRACT
+-- Hint: SUM(COUNT(*)) OVER () calculeaza totalul general al comenzilor
+--       dupa ce GROUP BY a produs numarul pe restaurant.
+--       Aceasta este o window function aplicata peste o agregare.
+--       Sintaxa:
+--         COUNT(*) AS nr_comenzi,
+--         SUM(COUNT(*)) OVER () AS total_general

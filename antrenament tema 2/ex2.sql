@@ -1,0 +1,16 @@
+-- Ex2: Pentru fiecare manager, afisati cati subordonati au un salariu
+--      strict mai mare decat salariul managerului.
+--      Afisati: numele managerului, prenumele, salariul sau,
+--               si numarul de subordonati cu salariu mai mare.
+--
+-- Indicatii:
+-- Tabele implicate: manageri, angajati
+--   manageri: id_manager, id_restaurant, data_numirii
+--             (id_manager este FK catre angajati.id_angajat)
+--   angajati: id_angajat, nume_angajat, prenume_angajat, cnp_angajat,
+--             data_nasterii, data_angajarii, id_restaurant, salariu
+--
+-- Notiuni: JOIN (angajati cu sine prin manageri), COUNT, GROUP BY, LEFT JOIN
+-- Hint: Trebuie sa JOIN-uiti tabelul angajati de doua ori:
+--       o data pentru datele managerului, o data pentru subordonati.
+--       Subordonat = angajat din acelasi restaurant, altul decat managerul.

@@ -1,0 +1,20 @@
+-- Ex10: Pentru fiecare furnizor si an calendaristic, afisati valoarea totala
+--       a aprovizionarilor, cu un subtotal pe furnizor si un total general.
+--
+-- Indicatii:
+-- Tabele implicate: furnizori, comenzi_produse_furnizori
+--   furnizori: id_furnizor, den_furn, tip_furn, adresa_furn, id_localitate
+--   comenzi_produse_furnizori: id_comanda_furnizor, data_ora_comanda,
+--                              id_restaurant, id_furnizor, id_produs,
+--                              cantitate, pret_total
+--
+-- Notiuni: GROUPING SETS, CTE (WITH), GROUP BY, EXTRACT, SUM
+-- Structura GROUPING SETS:
+--   GROUP BY GROUPING SETS (
+--       (id_furnizor, den_furn, an),   -- detaliu: furnizor + an
+--       (id_furnizor, den_furn),        -- subtotal: per furnizor
+--       ()                              -- total general
+--   )
+-- Hint: Randurile cu NULL in campul 'an' reprezinta subtotalul furnizorului.
+--       Randul cu NULL in toate campurile reprezinta totalul general.
+--       Folositi ORDER BY ... NULLS LAST pentru ordonare corecta.

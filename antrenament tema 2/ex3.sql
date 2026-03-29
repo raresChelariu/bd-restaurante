@@ -1,0 +1,16 @@
+-- Ex3: Care este cel mai mare numar de comenzi plasate intr-o singura zi?
+--
+-- Indicatii:
+-- Tabele implicate: comenzi
+--   comenzi: id_comanda, data_ora_comanda, id_client, id_masa, observatii
+--
+-- Notiuni: MAX, COUNT, GROUP BY, subquery (MAX aplicat peste un COUNT grupat)
+-- Structura generala:
+--   SELECT MAX(nr_comenzi)
+--   FROM (
+--       SELECT ..., COUNT(*) AS nr_comenzi
+--       FROM comenzi
+--       GROUP BY ...
+--   ) AS sub;
+-- Hint: Folositi DATE(data_ora_comanda) sau CAST(data_ora_comanda AS DATE)
+--       pentru a grupa pe zi (fara ora).

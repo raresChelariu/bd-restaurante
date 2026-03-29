@@ -1,0 +1,17 @@
+-- Ex7: Care clienti au facut mai multe rezervari decat clientul
+--      cu id_client = 1? (inlocuiti 1 cu un id valid)
+--      Afisati: numele clientului, prenumele si numarul de rezervari.
+--
+-- Indicatii:
+-- Tabele implicate: clienti, rezervari
+--   clienti:   id_client, nume, prenume, telefon, e_mail
+--   rezervari: id_rezervare, data_ora_rezervare, id_client,
+--              data_ora_sosire, data_ora_plecare
+--
+-- Notiuni: GROUP BY, HAVING, subquery scalar in HAVING
+-- Structura HAVING cu subquery:
+--   HAVING COUNT(*) > (
+--       SELECT COUNT(*) FROM rezervari WHERE id_client = 1
+--   )
+-- Hint: Subquery-ul scalar intoarce o singura valoare (numarul de rezervari al clientului X).
+--       HAVING compara agregatul grupului curent cu aceasta valoare.

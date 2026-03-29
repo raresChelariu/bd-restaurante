@@ -1,0 +1,14 @@
+-- Ex4: Pentru fiecare restaurant, afisati numarul de comenzi
+--      in 2021, 2022 si 2023 pe coloane separate.
+--      Afisati: numele restaurantului, nr_comenzi_2021,
+--               nr_comenzi_2022, nr_comenzi_2023.
+--
+-- Indicatii:
+-- Tabele implicate: restaurante, mese, comenzi
+--   restaurante: id_restaurant, den_rest, adresa_rest, id_localitate, locuri_restaurant
+--   mese:        id_masa, id_restaurant, masa_nr, observatii
+--   comenzi:     id_comanda, data_ora_comanda, id_client, id_masa, observatii
+--
+-- Notiuni: CASE WHEN, SUM, COUNT, GROUP BY, EXTRACT, LEFT JOIN
+-- Hint: Tehnica de pivot in SQL:
+--   SUM(CASE WHEN EXTRACT(YEAR FROM ...) = 2021 THEN 1 ELSE 0 END) AS nr_comenzi_2021

@@ -1,0 +1,16 @@
+-- Ex5: Pentru fiecare comanda din 2023, afisati daca contine:
+--        'doar bauturi'   - contine bauturi dar nu mancare
+--        'doar mancare'   - contine mancare dar nu bauturi
+--        'ambele'         - contine atat bauturi cat si mancare
+--      Rezolvati FARA a folosi EXISTS/INTERSECT - folositi LEFT JOIN.
+--
+-- Indicatii:
+-- Tabele implicate: comenzi, com_bauturi, com_mancare
+--   comenzi:     id_comanda, data_ora_comanda, id_client, id_masa, observatii
+--   com_bauturi: id_comanda, id_bautura, cantitate_comandata, pret_unitar
+--   com_mancare: id_comanda, id_sortiment_mancare, id_portie_comandata, pret_unitar
+--
+-- Notiuni: LEFT JOIN cu subquery DISTINCT, CASE WHEN IS NOT NULL / IS NULL, EXTRACT
+-- Hint: Faceti LEFT JOIN cu (SELECT DISTINCT id_comanda FROM com_bauturi)
+--       si LEFT JOIN cu (SELECT DISTINCT id_comanda FROM com_mancare).
+--       Verificati IS NOT NULL / IS NULL in CASE pentru a determina tipul.

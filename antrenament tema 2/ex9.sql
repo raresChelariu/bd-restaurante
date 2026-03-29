@@ -1,0 +1,16 @@
+-- Ex9: Pentru fiecare restaurant, afisati rangul angajatilor dupa salariu
+--      (in cadrul restaurantului). In caz de egalitate, angajatii cu acelasi
+--      salariu primesc acelasi rang (folositi RANK, nu ROW_NUMBER).
+--      Afisati: numele restaurantului, numele angajatului, salariul si rangul.
+--
+-- Indicatii:
+-- Tabele implicate: restaurante, angajati
+--   restaurante: id_restaurant, den_rest, adresa_rest, id_localitate, locuri_restaurant
+--   angajati:    id_angajat, nume_angajat, prenume_angajat, cnp_angajat,
+--                data_nasterii, data_angajarii, id_restaurant, salariu
+--
+-- Notiuni: RANK() OVER (PARTITION BY ... ORDER BY ...), JOIN
+-- Diferenta ROW_NUMBER vs RANK:
+--   ROW_NUMBER: 1, 2, 3, 4 (intotdeauna unic)
+--   RANK:       1, 2, 2, 4 (egalii primesc acelasi rang, urmatorul rang sare)
+--   DENSE_RANK: 1, 2, 2, 3 (egalii primesc acelasi rang, urmatorul rang NU sare)

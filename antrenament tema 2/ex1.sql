@@ -1,0 +1,8 @@
+-- Ex1: Cati clienti distincti au facut cel putin o rezervare in 2024?
+--
+-- Indicatii:
+-- Tabele implicate: rezervari
+--   rezervari: id_rezervare, data_ora_rezervare, id_client,
+--              data_ora_sosire, data_ora_plecare
+--
+-- Notiuni: COUNT(DISTINCT ...), WHERE, EXTRACT
