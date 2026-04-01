@@ -6,7 +6,8 @@
       "Bash(python -c \":*)",
       "Bash(psql -U postgres -c \"\\\\l\")",
       "Bash(PGPASSWORD=postgres \"/c/Program Files/PostgreSQL/18/bin/psql\" -U postgres -c \"\\\\l\")",
-      "Bash(PGPASSWORD=postgres \"/c/Program Files/PostgreSQL/18/bin/psql\" -U postgres -d restaurante -f \"c:/Users/CUG/Desktop/feea/bd restaurante/populate.sql\")"
+      "Bash(PGPASSWORD=postgres \"/c/Program Files/PostgreSQL/18/bin/psql\" -U postgres -d restaurante -f \"c:/Users/CUG/Desktop/feea/bd restaurante/populate.sql\")",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ]
   }
 }
