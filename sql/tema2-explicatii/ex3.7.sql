@@ -1,3 +1,7 @@
+
+
+
+
 -- Restaurante3.7: Pentru fiecare produs, afisati pe coloane separate valoarea
 --                 comenzilor pentru anii 2021, 2022 si 2023.
 

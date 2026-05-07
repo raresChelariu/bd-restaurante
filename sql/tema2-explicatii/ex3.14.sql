@@ -12,56 +12,41 @@
 -- EXPLICATIE PAS CU PAS (de la incepator la incepator)
 -- ============================================================
 -- "Ponderea" = procentul fiecarui furnizor din total. Adica:
---   pondere = (suma_furnizor / suma_generala) * 100
+--   pondere = (suma_furnizor / suma_general) * 100
 --
--- IDEEA: avem nevoie de DOUA sume:
---   1) Suma per furnizor (ce a livrat fiecare in 2023)
---   2) Suma TOTALA (ce s-a livrat in toata 2023)
--- Apoi facem raportul.
+-- Avem nevoie de DOUA sume:
+--   1) Suma per furnizor (cat a livrat fiecare in 2023)
+--   2) Suma TOTALA din 2023 (pentru toti furnizorii la un loc)
 --
--- VARIANTA CLASICA: 2 subconsultari => greoi.
--- VARIANTA INTELIGENTA: folosim functii de fereastra peste rezultatul agregat.
+-- PASUL 1: Suma per furnizor
+--   Filtram pe anul 2023, grupam dupa furnizor si calculam SUM(pret_total).
 --
--- PASUL 1: GROUP BY furnizor, dupa filtrarea pe 2023
---   SUM(cpf.pret_total) -> suma livrarilor de la fiecare furnizor in 2023
---
--- PASUL 2: Suma totala intr-o functie de fereastra
---   SUM(SUM(cpf.pret_total)) OVER ()
---   Asta arata ciudat la prima vedere - SUM in interiorul SUM!
---   Explicatia:
---     - SUM(cpf.pret_total) este suma per grup (per furnizor) - calculul de baza.
---     - SUM(...) OVER () este o functie de fereastra. Fereastra "()" inseamna
---       "fereastra completa" - fara PARTITION BY si fara ORDER BY.
---     - Aplicata peste rezultatul agregat, ne da "suma sumelor" = totalul general.
---   Asadar acelasi numar (totalul general) apare in fiecare rand al rezultatului.
+-- PASUL 2: Suma totala
+--   O scriem ca subconsultare scalara (returneaza UN SINGUR numar):
+--     (SELECT SUM(pret_total)
+--        FROM comenzi_produse_furnizori
+--       WHERE EXTRACT(YEAR FROM data_ora_comanda) = 2023)
+--   Acelasi numar va fi folosit la fiecare rand din rezultat.
 --
 -- PASUL 3: Calculam procentul
---   ROUND(
---       SUM(cpf.pret_total) * 100.0
---       / SUM(SUM(cpf.pret_total)) OVER (),
---       2
---   ) AS pondere_procent
---   Inmultim cu 100.0 (cu zecimale!) ca sa nu avem impartire intreaga.
+--   pondere = SUM(pret_total) * 100.0 / total_general
+--   Inmultim cu 100.0 (cu zecimale!) ca sa evitam impartirea intreaga.
 --   ROUND(..., 2) -> rotunjim la 2 zecimale (ex: 23.45).
 --
 -- PASUL 4: ORDER BY pondere_procent DESC
---   Cele mai importante furnizori apar primii.
---
--- DE CE NU SUBCONSULTARE?
---   Am fi putut scrie:
---     ... / (SELECT SUM(pret_total) FROM cpf WHERE EXTRACT(YEAR ...) = 2023)
---   E mai lung si mai greu de citit. SUM(SUM(...)) OVER() e mai elegant.
+--   Cei mai importanti furnizori apar primii.
 
 SELECT
     f.id_furnizor,
     f.den_furn,
-    SUM(cpf.pret_total)                                                  AS total_furnizor,
-    SUM(SUM(cpf.pret_total)) OVER ()                                     AS total_general,
+    SUM(cpf.pret_total) AS total_furnizor,
     ROUND(
         SUM(cpf.pret_total) * 100.0
-        / SUM(SUM(cpf.pret_total)) OVER (),
+        / (SELECT SUM(pret_total)
+             FROM comenzi_produse_furnizori
+            WHERE EXTRACT(YEAR FROM data_ora_comanda) = 2023),
         2
-    )                                                                    AS pondere_procent
+    ) AS pondere_procent
 FROM comenzi_produse_furnizori cpf
 JOIN furnizori f ON f.id_furnizor = cpf.id_furnizor
 WHERE EXTRACT(YEAR FROM cpf.data_ora_comanda) = 2023

@@ -1,5 +1,7 @@
 -- Restaurante3.8: Care este cel mai mare numar de rezervari pentru o luna calendaristica?
 
+
+select * from rezervari;
 -- ============================================================
 -- TABELE SI COLOANE IMPLICATE
 -- ============================================================
@@ -21,9 +23,9 @@
 --     EXTRACT(YEAR  FROM data_ora_rezervare) AS an
 --     EXTRACT(MONTH FROM data_ora_rezervare) AS luna
 --   Numar randurile cu COUNT(*) si grupez dupa an si luna:
---     SELECT an, luna, COUNT(*) AS nr_rezervari
---     FROM rezervari
---     GROUP BY an, luna
+     SELECT  EXTRACT(YEAR  FROM data_ora_rezervare) an,  EXTRACT(MONTH  FROM data_ora_rezervare) luna, COUNT(*) AS nr_rezervari
+     FROM rezervari
+     GROUP BY an, luna;
 --   Asta imi da o lista cu fiecare luna si cate rezervari are.
 --   Ii pun un alias: "rezervari_pe_luna".
 --
@@ -39,14 +41,10 @@
 --   EXTRACT returneaza un NUMERIC. Cu "::INT" il convertim la intreg.
 --   Pentru calcul nu schimba nimic, dar afisarea e mai curata.
 
-SELECT MAX(nr_rezervari) AS max_rezervari_pe_luna
-FROM (
-    SELECT
-        EXTRACT(YEAR  FROM data_ora_rezervare)::INT AS an,
-        EXTRACT(MONTH FROM data_ora_rezervare)::INT AS luna,
-        COUNT(*)                                    AS nr_rezervari
-    FROM rezervari
-    GROUP BY
-        EXTRACT(YEAR  FROM data_ora_rezervare),
-        EXTRACT(MONTH FROM data_ora_rezervare)
-) AS rezervari_pe_luna;
+SELECT count(*) nr_rezervari FROM rezervari
+group by 
+    EXTRACT(YEAR  FROM data_ora_rezervare),
+    EXTRACT(MONTH FROM data_ora_rezervare)
+ORDER BY
+    nr_rezervari DESC
+LIMIT 1;

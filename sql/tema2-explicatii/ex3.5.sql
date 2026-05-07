@@ -37,3 +37,8 @@
 SELECT COUNT(*) AS nr_angajati_2023
 FROM angajati
 WHERE EXTRACT(YEAR FROM data_angajarii) = 2023;
+
+
+select * from localitati;
+
+select * from restaurante;

@@ -36,13 +36,21 @@
 --
 -- PASUL 1: Construim o "tabela" cu toate (client, produs) comandate
 --   Un client poate comanda un produs in doua moduri: ca bautura sau ca mancare.
---   Le unim pe ambele cu UNION (UNION elimina duplicatele):
---     -- prin bauturi: comenzi -> com_bauturi -> bauturi -> id_produs
---     SELECT c.id_client, b.id_produs FROM com_bauturi cb JOIN comenzi c ... JOIN bauturi b ...
---     UNION
---     -- prin mancare: comenzi -> com_mancare -> meniuri_mancare -> id_produs
---     SELECT c.id_client, mm.id_produs FROM com_mancare cm JOIN comenzi c ... JOIN meniuri_mancare mm ...
+--   Le unim pe ambele cu UNION (UNION elimina duplicatele).
 --   O punem in CTE-ul "comenzi_produs".
+--   Poti rula cele doua bucati separat (decomentate mai jos) ca sa vezi continutul:
+
+-- prin bauturi: comenzi -> com_bauturi -> bauturi -> id_produs
+SELECT c.id_client, b.id_produs
+FROM com_bauturi cb
+JOIN comenzi c ON c.id_comanda = cb.id_comanda
+JOIN bauturi b ON b.id_bautura = cb.id_bautura;
+
+-- prin mancare: comenzi -> com_mancare -> meniuri_mancare -> id_produs
+SELECT c.id_client, mm.id_produs
+FROM com_mancare cm
+JOIN comenzi c          ON c.id_comanda            = cm.id_comanda
+JOIN meniuri_mancare mm ON mm.id_sortiment_mancare = cm.id_sortiment_mancare;
 --
 -- PASUL 2: SELECT din produse, filtram cu dublu NOT EXISTS
 --   Vrem fiecare produs P care indeplineste:

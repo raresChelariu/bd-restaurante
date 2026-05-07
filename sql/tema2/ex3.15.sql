@@ -47,10 +47,16 @@ vanzari_totale AS (
     JOIN vanzari_mancare vm ON vm.id_restaurant = r.id_restaurant
 )
 SELECT
-    id_restaurant,
-    den_rest,
-    RANK() OVER (ORDER BY total_ian DESC) AS pozitie_ianuarie_2023,
-    RANK() OVER (ORDER BY total_s1  DESC) AS pozitie_sem1_2023,
-    RANK() OVER (ORDER BY total_an  DESC) AS pozitie_an_2023
-FROM vanzari_totale
-ORDER BY den_rest;
+    v.id_restaurant,
+    v.den_rest,
+    (SELECT COUNT(*) + 1
+       FROM vanzari_totale v2
+      WHERE v2.total_ian > v.total_ian) AS pozitie_ianuarie_2023,
+    (SELECT COUNT(*) + 1
+       FROM vanzari_totale v2
+      WHERE v2.total_s1  > v.total_s1)  AS pozitie_sem1_2023,
+    (SELECT COUNT(*) + 1
+       FROM vanzari_totale v2
+      WHERE v2.total_an  > v.total_an)  AS pozitie_an_2023
+FROM vanzari_totale v
+ORDER BY v.den_rest;

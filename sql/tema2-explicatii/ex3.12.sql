@@ -17,10 +17,11 @@
 -- IDEEA: facem comparatie a fiecarei comenzi cu un singur numar - totalul lui X.
 --
 -- PASUL 1: Calculam totalul de bauturi pentru fiecare comanda
---   SELECT id_comanda, SUM(cantitate_comandata) AS total_bauturi
---   FROM com_bauturi
---   GROUP BY id_comanda
 --   Aici intr-un rand avem o comanda si numarul total de bauturi din ea.
+--   Poti rula separat (decomentat mai jos) ca sa vezi rezultatul:
+SELECT id_comanda, SUM(cantitate_comandata) AS total_bauturi
+FROM com_bauturi
+GROUP BY id_comanda;
 --
 -- PASUL 2: Calculam totalul pentru comanda X (un singur numar)
 --   SELECT SUM(cantitate_comandata)

@@ -2,6 +2,10 @@
 -- Un subordonat = angajat care lucreaza la acelasi restaurant condus de manager,
 -- exclusiv managerul insusi.
 
+
+select * from manageri;
+select * from angajati
+where id_restaurant =;
 -- ============================================================
 -- TABELE SI COLOANE IMPLICATE
 -- ============================================================
